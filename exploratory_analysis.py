@@ -1,11 +1,22 @@
-def analyze_data(data):
-    # Solo selecciona columnas numéricas
-    numeric_data = data.select_dtypes(include=['float64', 'int64'])
-    
-    # Calculamos la correlación con 'SalePrice'
+import pandas as pd
+# exploratory_analysis.py
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_correlation(data):
+    numeric_data = data.select_dtypes(include=[np.number])
     correlation = numeric_data.corr()
-    print(correlation['SalePrice'].sort_values(ascending=False))
+    plt.figure(figsize=(12, 9))
+    plt.matshow(correlation, fignum=1)
+    plt.xticks(range(len(correlation.columns)), correlation.columns, rotation=90)
+    plt.yticks(range(len(correlation.columns)), correlation.columns)
+    plt.colorbar()
+    plt.show()
 
-    # Aquí puedes agregar más análisis y visualizaciones si lo deseas
+def select_features(data, target_column):
+    numeric_data = data.select_dtypes(include=[np.number])
+    correlation = numeric_data.corr()[target_column]
+    relevant_features = correlation[correlation.abs() > 0.5].index.tolist()
+    return relevant_features
 
-    # Aquí puedes agregar más análisis y visualizaciones si lo deseas
